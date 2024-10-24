@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Course</h2>
+{% for course in courses %}
+<div class="card p-2 d-flex flex-row align-items-center ">
+    <div class="col-10"> {{course.title}} - {{course.price}} USD </div>
+    <div clas="col-2">
+        {{% if course.is_unlocked %}}
+        <a href="{%url 'course_detail' course.id '%}" class="btn btn-succuss">View Course</a>
+        {% else %}
+        <a href="#" class="btn btn-danger">Buy Course</a>
+        {% endif %}
+    </div>
+</div>
+
+
+{%endfor%}
+
+{% endblock  %}
