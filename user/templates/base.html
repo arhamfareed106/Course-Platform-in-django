@@ -17,16 +17,43 @@
             display: flex;
             flex-direction: column;
         }
-        
+
         .navbar {
             background-color: #1e1e1e;
             transition: background-color 0.3s ease; /* Smooth navbar background transition */
         }
-        
-        .navbar-brand, .nav-link {
+
+        .navbar-brand {
+            color: #bb86fc;
+            position: relative; /* For positioning the hover effect */
+            overflow: hidden; /* Clipping for the hover effect */
+        }
+
+        .navbar-brand:hover {
+            color: #ffffff; /* Change text color on hover */
+            transform: scale(1.05); /* Scale effect on hover */
+        }
+
+        .navbar-brand::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            height: 2px; /* Thickness of the line */
+            width: 100%;
+            background: #bb86fc; /* Line color */
+            transform: translateX(-50%) scaleX(0); /* Start hidden */
+            transition: transform 0.3s ease; /* Smooth transition */
+        }
+
+        .navbar-brand:hover::after {
+            transform: translateX(-50%) scaleX(1); /* Show line on hover */
+        }
+
+        .nav-link {
             color: #bb86fc;
         }
-        
+
         .nav-link:hover {
             color: #ffffff;
             transform: scale(1.1); /* Scale effect on hover */
@@ -57,12 +84,32 @@
             padding: 10px 15px; /* Padding for better spacing */
             transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transitions */
             margin-right: 10px; /* Space between buttons */
+            position: relative; /* Position for pseudo-element */
+            overflow: hidden; /* Ensure pseudo-element is clipped */
         }
 
         .btn-link:hover {
             background-color: #bb86fc; /* Change background color on hover */
             color: #121212; /* Change text color on hover */
             transform: scale(1.05); /* Scale effect on hover */
+        }
+
+        /* Button Hover Animation */
+        .btn-link::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: rgba(255, 255, 255, 0.1); /* Light overlay */
+            border-radius: 50%; /* Circular shape */
+            transform: translate(-50%, -50%) scale(0); /* Start invisible */
+            transition: transform 0.5s ease; /* Smooth transition */
+        }
+
+        .btn-link:hover::after {
+            transform: translate(-50%, -50%) scale(1); /* Scale on hover */
         }
 
         /* Custom Navbar Hover Effect */
@@ -88,17 +135,70 @@
             text-align: center;
             padding: 10px 0;
             position: relative; /* Allow positioning */
+            margin-top: auto; /* Push footer to the bottom */
         }
 
         /* Footer Text Animation */
         .footer-text {
             transition: transform 0.3s ease, color 0.3s ease;
+            display: inline-block; /* Allows for transform effect */
         }
 
         .footer-text:hover {
             transform: scale(1.1); /* Scale effect on hover */
             color: #bb86fc; /* Change color on hover */
         }
+
+        /* Footer Text Animation */
+        .footer-text {
+            opacity: 0; /* Start invisible */
+            animation: fadeInFooter 0.5s forwards; /* Animation effect */
+            animation-delay: 0.5s; /* Delay for footer text */
+        }
+
+        @keyframes fadeInFooter {
+            to {
+                opacity: 1; /* End fully visible */
+            }
+        }
+
+        /* Sign In and Register Button Styles */
+        .btn-primary, .btn-secondary {
+            color: #bb86fc;
+            background-color: #1e1e1e; /* Dark background */
+            border: none; /* Remove border */
+            border-radius: 5px; /* Rounded corners */
+            padding: 10px 15px; /* Padding for better spacing */
+            transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transitions */
+            margin: 5px; /* Space between buttons */
+            position: relative; /* Position for pseudo-element */
+            overflow: hidden; /* Ensure pseudo-element is clipped */
+        }
+
+        .btn-primary:hover, .btn-secondary:hover {
+            background-color: #bb86fc; /* Change background color on hover */
+            color: #121212; /* Change text color on hover */
+            transform: scale(1.05); /* Scale effect on hover */
+        }
+
+        /* Button Hover Animation for Sign In and Register */
+        .btn-primary::after, .btn-secondary::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: rgba(255, 255, 255, 0.1); /* Light overlay */
+            border-radius: 50%; /* Circular shape */
+            transform: translate(-50%, -50%) scale(0); /* Start invisible */
+            transition: transform 0.5s ease; /* Smooth transition */
+        }
+
+        .btn-primary:hover::after, .btn-secondary:hover::after {
+            transform: translate(-50%, -50%) scale(1); /* Scale on hover */
+        }
+
     </style>
 </head>
 <body>
@@ -127,10 +227,10 @@
                 {% else %}
                     <!-- Display Login and Register Links for Logged-out Users -->
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'login' %}">Sign In</a>
+                        <a class="btn btn-primary" href="{% url 'login' %}">Sign In</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'register' %}">Register</a>
+                        <a class="btn btn-secondary" href="{% url 'register' %}">Register</a>
                     </li>
                 {% endif %}
             </ul>

@@ -56,8 +56,8 @@
             {% for course in featured_courses %}
                 <div class="col-md-4">
                     <div class="course-card">
-                        <h3>{{ course.name }}</h3>
-                        <p>{{ course.description|truncatewords:20 }}</p>
+                        <h3>{{ course.title }}</h3>
+                        <p>{{ course.content|truncatewords:20 }}</p>
                         <a href="{% url 'course_detail' course.id %}" class="btn btn-course">Learn More</a>
                     </div>
                 </div>
