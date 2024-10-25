@@ -32,4 +32,4 @@ def course_detail(request, course_id ):
     context={
         "course": course
     }
-    # return render (request, "course_detail.html" context)
+    return render (request, "course_detail.html" context)
