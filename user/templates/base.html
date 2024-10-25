@@ -199,6 +199,28 @@
             transform: translate(-50%, -50%) scale(1); /* Scale on hover */
         }
 
+        /* About Us Button Styles */
+        .btn-about {
+            background-color: #bb86fc; /* Button color */
+            color: #121212; /* Button text color */
+            border: none; /* Remove border */
+            border-radius: 5px; /* Rounded corners */
+            padding: 15px 25px; /* Padding for better spacing */
+            font-size: 16px; /* Font size */
+            margin-top: 20px; /* Margin above button */
+            transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease; /* Smooth transitions */
+        }
+
+        .btn-about:hover {
+            background-color: #9a67d2; /* Darken on hover */
+            color: #ffffff; /* Change text color on hover */
+            transform: scale(1.1); /* Scale effect on hover */
+        }
+
+        .btn-about:focus {
+            outline: none; /* Remove outline on focus */
+        }
+
     </style>
 </head>
 <body>
@@ -210,22 +232,22 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link btn-link p-4" href="{% url 'about_us' %}">About Us</a> <!-- New About Us link -->
+                </li>
                 {% if user.is_authenticated %}
-                    <!-- Display User Info Button for Logged-in Users -->
                     <li class="nav-item">
-                        <a class="btn btn-link" href="{% url 'user_info' %}">User Info</a>
+                        <a class="btn-link" href="{% url 'user_info' %}">User Info</a> <!-- Updated User Info button -->
                     </li>
-                    <!-- Display Logout Button for Logged-in Users -->
                     <li class="nav-item">
                         <form method="POST" action="{% url 'logout' %}">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-link">
+                            <button type="submit" class="btn-link">
                                 Logout
-                            </button>
+                            </button> <!-- Updated Logout button -->
                         </form>
                     </li>
                 {% else %}
-                    <!-- Display Login and Register Links for Logged-out Users -->
                     <li class="nav-item">
                         <a class="btn btn-primary" href="{% url 'login' %}">Sign In</a>
                     </li>
@@ -237,7 +259,15 @@
         </div>
     </nav>
 
-    <div class="container mt-5 pt-4">{% block content %}{% endblock %}</div> <!-- Adjusted margin for fixed navbar -->
+    <div class="container mt-5 pt-4">
+        {% block content %}
+        <div class="text-center">
+            <h1>Welcome to Our Course Platform</h1>
+            <p>Join us in exploring a wide range of courses tailored for your learning journey!</p>
+            <a href="{% url 'about_us' %}" class="btn-about">Learn More About Us</a> <!-- About Us button -->
+        </div>
+        {% endblock %}
+    </div>
 
     <footer>
         <p class="footer-text">Developed by Arham Fareed</p>
@@ -247,7 +277,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-        // Change navbar background on scroll
         window.onscroll = function() {
             const navbar = document.querySelector('.navbar');
             if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {

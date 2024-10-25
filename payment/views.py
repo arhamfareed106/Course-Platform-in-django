@@ -11,11 +11,9 @@ from django.contrib.auth.decorators import login_required
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
-# Create your views here.
 @login_required
 def create_checkout_session(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
-    
     price_in_cents = int(course.price * 100)
 
     session = stripe.checkout.Session.create(
@@ -31,8 +29,8 @@ def create_checkout_session(request, course_id):
             "quantity": 1
         }],
         mode="payment",
-        success_url=request.build_absolute_uri(reverse("course_success")),
-        cancel_url=request.build_absolute_uri(reverse("course_cancel")),
+        success_url=request.build_absolute_uri(reverse("payment:course_success", args=[course_id])),
+        cancel_url=request.build_absolute_uri(reverse("payment:course_cancel")),
         metadata={"course_id": course_id, "user_id": request.user.id}
     )
 
@@ -43,16 +41,14 @@ def create_checkout_session(request, course_id):
 @require_POST
 def stripe_webhook(request):
     payload = smart_str(request.body)
-    sig_header = request.META["HTTP_STRIPE_SIGNATURE"]
+    sig_header = request.META.get("HTTP_STRIPE_SIGNATURE")
 
     try:
         event = stripe.Webhook.construct_event(
             payload, sig_header, settings.STRIPE_ENDPOINT_SECRET
         )
-    except ValueError:
-        return JsonResponse({'error': "Invalid payload"}, status=400)
-    except stripe.error.SignatureVerificationError: # type: ignore
-        return JsonResponse({"error": "Invalid signature"}, status=400)
+    except (ValueError, stripe.error.SignatureVerificationError): # type: ignore
+        return JsonResponse({"error": "Webhook signature verification failed"}, status=400)
     
     if event["type"] == "checkout.session.completed":
         session = event["data"]["object"]
@@ -70,8 +66,9 @@ def handle_checkout_session(session):
     course.subscribers.add(user)
 
 @login_required
-def course_success(request):
-    return redirect("course_list")
+def course_success(request, course_id):
+    return redirect("course_detail", course_id=course_id)
+
 
 @login_required
 def course_cancel(request):
