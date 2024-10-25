@@ -133,7 +133,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 LOGIN_URL = "/user/login"
-LOGIN_REDIRECT_URL = ""
 LOGOUT_REDIRECT_URL = "LOGIN_URL"
+# settings.py
+LOGOUT_REDIRECT_URL = 'login'  # or use the actual URL path like '/login/'
+
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+if DEBUG:
+    STRIPE_PUBLISHABLE_KEY = "pk_test_51QArxsGIq0xwpUNADJ5o7RiuIKrT6lLwUU8zqV933ixt9YX7HW0AyCFXRWJvHXkZXWBWxDCTewTs11D7ylXZhnyc0046tuTmed"
+    STRIPE_SECRET_KEY = "sk_test_51QArxsGIq0xwpUNA6QHKw53KYWKFnBICZZPLSOUp5YE13ybInoveSiQHRuFX94CKPcXZuaDHrqk6wCpzLncrzaYV00KhH9GhvP"
+
+    STRIPE_ENDPOINT_SECRET= ""
+
+

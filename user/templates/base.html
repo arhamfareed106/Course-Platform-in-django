@@ -1,50 +1,161 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Course SaaS</title>
 
-    <link
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-  </head>
-  <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="#">Course Platform</a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarNav"
-        aria-controls="navbarNav"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ml-auto">
-          {% if user.is_authenticated %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-          </li>
-          {% else %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'login' %}">Sign In</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'register' %}">Register</a>
-          </li>
-          {% endif %}
-        </ul>
-      </div>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        /* Dark Theme */
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: 'Arial', sans-serif; /* Improved font */
+            min-height: 100vh; /* Ensure body takes full height */
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .navbar {
+            background-color: #1e1e1e;
+            transition: background-color 0.3s ease; /* Smooth navbar background transition */
+        }
+        
+        .navbar-brand, .nav-link {
+            color: #bb86fc;
+        }
+        
+        .nav-link:hover {
+            color: #ffffff;
+            transform: scale(1.1); /* Scale effect on hover */
+        }
+
+        /* Container Animation */
+        .container {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.5s ease-out forwards;
+            flex: 1; /* Allow container to expand */
+        }
+
+        /* Keyframes for Fade-In */
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Button Styles */
+        .btn-link {
+            color: #bb86fc; /* Link color */
+            background-color: #1e1e1e; /* Dark background */
+            border: none; /* Remove border */
+            border-radius: 5px; /* Rounded corners */
+            padding: 10px 15px; /* Padding for better spacing */
+            transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transitions */
+            margin-right: 10px; /* Space between buttons */
+        }
+
+        .btn-link:hover {
+            background-color: #bb86fc; /* Change background color on hover */
+            color: #121212; /* Change text color on hover */
+            transform: scale(1.05); /* Scale effect on hover */
+        }
+
+        /* Custom Navbar Hover Effect */
+        .navbar-nav .nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.1); /* Background on hover */
+            border-radius: 5px; /* Rounded corners */
+        }
+
+        /* Navbar Positioning */
+        .navbar-nav {
+            margin-left: auto; /* Aligns nav items to the right */
+        }
+
+        /* Transition for the navbar */
+        .navbar.scrolled {
+            background-color: #1c1c1c; /* Darken navbar on scroll */
+        }
+
+        /* Footer Style */
+        footer {
+            background-color: #1e1e1e;
+            color: #e0e0e0;
+            text-align: center;
+            padding: 10px 0;
+            position: relative; /* Allow positioning */
+        }
+
+        /* Footer Text Animation */
+        .footer-text {
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .footer-text:hover {
+            transform: scale(1.1); /* Scale effect on hover */
+            color: #bb86fc; /* Change color on hover */
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <a class="navbar-brand" href="{% url 'homepage' %}">Course Platform</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto align-items-center">
+                {% if user.is_authenticated %}
+                    <!-- Display User Info Button for Logged-in Users -->
+                    <li class="nav-item">
+                        <a class="btn btn-link" href="{% url 'user_info' %}">User Info</a>
+                    </li>
+                    <!-- Display Logout Button for Logged-in Users -->
+                    <li class="nav-item">
+                        <form method="POST" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-link">
+                                Logout
+                            </button>
+                        </form>
+                    </li>
+                {% else %}
+                    <!-- Display Login and Register Links for Logged-out Users -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Sign In</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register' %}">Register</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
     </nav>
 
-    <div class="container mt-4">{% block content %} {% endblock %}</div>
+    <div class="container mt-5 pt-4">{% block content %}{% endblock %}</div> <!-- Adjusted margin for fixed navbar -->
+
+    <footer>
+        <p class="footer-text">Developed by Arham Fareed</p>
+    </footer>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  </body>
+    <script>
+        // Change navbar background on scroll
+        window.onscroll = function() {
+            const navbar = document.querySelector('.navbar');
+            if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        };
+    </script>
+</body>
 </html>

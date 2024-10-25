@@ -2,31 +2,39 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from course.models import Course
 
-# Create your views here.
+# New homepage view
+def homepage(request):
+    # Example: Get the first 5 courses, you can adjust the filter as needed
+    featured_courses = Course.objects.all()[:5]  # Get the first 5 courses
+    context = {
+        "featured_courses": featured_courses
+    }
+    return render(request, "homepage.html", context)
 
 @login_required
-def course_list(request, ):
-    courses= Course.objects.all()
-
+def course_list(request):
+    courses = Course.objects.all()
+    
     if request.user.is_authenticated:
         for course in courses:
-            course.is_unlocked = request.user in course.subscribers.all() # type: ignore
+            course.is_unlocked = request.user in course.subscribers.all()  # type: ignore
     else:
         for course in courses:
-            course.is_unlocked = False # type: ignore
+            course.is_unlocked = False  # type: ignore
 
-    context ={
+    context = {
         "courses": courses
     }
-    return render (request, "course_list.html" , context)
+    return render(request, "course_list.html", context)
 
 @login_required
-def course_detail(request, course_id ):
-    course = get_object_or_404(Course, id =course_id)
-
+def course_detail(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+    
     if request.user not in course.subscribers.all():
         return redirect("course_list")
-    context={
+    
+    context = {
         "course": course
     }
     return render(request, "course_detail.html", context)
