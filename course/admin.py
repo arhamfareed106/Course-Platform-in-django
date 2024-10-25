@@ -6,3 +6,4 @@ from .models import Course
 class CourseAdmin(admin.ModelAdmin):
     list_display = ['title', 'instructor','created_at','update_at',]
     search_fields= ['title','instructor__username',]
+    list_filter=["created_at", "update_at","instructor",]

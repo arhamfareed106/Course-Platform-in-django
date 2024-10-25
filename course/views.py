@@ -1,8 +1,5 @@
-from multiprocessing import context
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-
-import course
 from course.models import Course
 
 # Create your views here.
@@ -12,11 +9,11 @@ def course_list(request, ):
     courses= Course.objects.all()
 
     if request.user.is_authenticated:
-        for course in course:
-            course.is_valid = request.user in course.subscribers.all()
+        for course in courses:
+            course.is_unlocked = request.user in course.subscribers.all() # type: ignore
     else:
-        for course in course:
-            course.is_valid = False
+        for course in courses:
+            course.is_unlocked = False # type: ignore
 
     context ={
         "courses": courses
@@ -32,4 +29,4 @@ def course_detail(request, course_id ):
     context={
         "course": course
     }
-    return render (request, "course_detail.html" context)
+    return render(request, "course_detail.html", context)
